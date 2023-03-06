@@ -1,4 +1,4 @@
-package javarush.tasks.task00;
+package javarush.tasks.tasks00;
 
 public class Solution5 {
 

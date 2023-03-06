@@ -1,4 +1,4 @@
-package javarush.tasks.task00;
+package javarush.tasks.tasks00;
 import java.util.HashSet;
 
 //	В классе Solution есть метод arrayToHashSet(String[]),который должен из переданного массива вернуть HashSet <String> с теми же элементами.

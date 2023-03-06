@@ -1,7 +1,7 @@
-package javarush.tasks.task1314;
+package javarush.tasks.tasks04.task1314;
 
 
-public class Solution6 {
+public class Solution {
 
 	public static void main(String[] args) {
 		StringLinkedList stringLinkedList = new StringLinkedList();

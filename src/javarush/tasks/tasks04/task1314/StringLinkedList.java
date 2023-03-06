@@ -1,4 +1,4 @@
-package javarush.tasks.task1314;
+package javarush.tasks.tasks04.task1314;
 
 
 public class StringLinkedList {

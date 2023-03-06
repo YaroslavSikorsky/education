@@ -1,4 +1,4 @@
-package javarush.tasks.task00;
+package javarush.tasks.tasks00;
 
 //Преобразование (кстати, а из строки вот так: int имя = Integer.parseInt(строка);)
 

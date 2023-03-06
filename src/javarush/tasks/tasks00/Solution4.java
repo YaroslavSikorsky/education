@@ -1,4 +1,4 @@
-package javarush.tasks.task00;
+package javarush.tasks.tasks00;
 
 // раз твоя задача — реализовать методы:
 // printStudents, который выводит только имена всех студентов (ключ коллекции);

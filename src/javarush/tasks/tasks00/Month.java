@@ -1,4 +1,4 @@
-package javarush.tasks.task00;
+package javarush.tasks.tasks00;
 
 // В enum Month добавь 4 метода: getWinterMonths(), getSpringMonths(), getSummerMonths(), getAutumnMonths() которые будут возвращать массив с тремя месяцами.
 
