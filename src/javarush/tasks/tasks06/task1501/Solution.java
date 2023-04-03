@@ -16,7 +16,7 @@ public class Solution {
             System.out.println(line.toLowerCase());
             
         } catch (IOException e) {
-            System.out.println("Something went wrong : " + e);
+            System.out.println("Something went wrooong : " + e);
         } 
     }
 }
