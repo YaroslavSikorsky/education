@@ -101,7 +101,7 @@ void write(byte[] buffer, off, len) Записывает часть массив
 void flush()                Записывает в поток все данные, которые хранятся в буфере
 void close()                Закрывает поток
 Writer
-Методы	Описание
+Методы	                    Описание
 void write(int b)           Записывает один символ (не int) в поток
 void write(char[] buffer)   Записывает массив символов в поток
 void write(char[] buffer, off, len) Записывает часть массива символов в поток
