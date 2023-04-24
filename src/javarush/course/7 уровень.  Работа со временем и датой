@@ -1,6 +1,14 @@
 // Обеспечение совместимости в Java
 // Класс Date
 // Класс Calendar
+// Современная работа с датой
+// Современная работа со временем
+// Полезные нюансы при работе с DateTime API
+// Часовые пояса
+// Отображение времени - форматирование
+
+// Как не потеряться во времени — DateTime и Calendar https://javarush.com/groups/posts/1941-kak-ne-poterjatjhsja-vo-vremeni--datetime-i-calendar
+
 
 
 Обеспечение совместимости в Java
@@ -54,3 +62,197 @@ date.setTime( Date.parse("Jul 06 12:15:00 2019") ); или
 Date date = new Date("Jul 06 12:15:00 2019");
 
 Класс Calendar
+Полное имя класса Calendar — java.util.Calendar
+Программисты любили класс Date за его простоту и поддержку стандартов Unix, но, как известно, наши недостатки — это продолжение наших достоинств.
+Программисты хотели иметь «умный класс Date». И такой класс появился: им стал класс Calendar. Он задумывался как инструмент не только хранения, но и сложной работы с датами.
+Создание объекта календарь
+Calendar date = Calendar.getInstance();
+Статический метод getInstance() класса Calendar создаст объект Calendar, инициализированный текущей датой. В зависимости от настроек компьютера, на котором выполняется программа, будет создан нужный календарь
+Calendar date = new GregorianCalendar(год, месяц, день);
+Год нужно писать полностью: никаких 19 вместо 2019. Месяцы по-прежнему нумеруются с нуля. А дни месяца по-прежнему нумеруются не с нуля.
+Calendar calendar = new GregorianCalendar(2019, 03, 12);
+System.out.println(calendar.getTime());
+Fri Apr 12 00:00:00 EEST 2019
+Работа с фрагментами даты int month = calendar.get(Calendar.MONTH);
+Код                                     	    Описание
+Calendar calendar = Calendar.getInstance();
+int era = calendar.get(Calendar.ERA);           эра (до нашей эры или после)
+int year = calendar.get(Calendar.YEAR);         год
+int month = calendar.get(Calendar.MONTH);       месяц
+int day = calendar.get(Calendar.DAY_OF_MONTH);  день месяца
+int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);день недели
+int hour = calendar.get(Calendar.HOUR);         часы
+int minute = calendar.get(Calendar.MINUTE);     минуты
+int second = calendar.get(Calendar.SECOND);     секунды
+Для изменения фрагмента даты используется метод set:
+calendar.set(Calendar.MONTH, значение);
+Изменение даты в объекте Calendar
+calendar.add(Calendar.MONTH, значение);
+Прокручивание фрагментов даты
+Для этого у класса Calendar есть специальный метод — roll(). По своей сигнатуре он полностью аналогичен методу add(),
+но любые изменения с его помощью затрагивают один параметр, остальные остаются неизменными.
+Код
+Calendar calendar = new GregorianCalendar(2019, Calendar.FEBRUARY, 27);
+calendar.roll(Calendar.MONTH, -2);
+System.out.println(calendar.getTime());
+Вывод на экран
+Fri Dec 27 00:00:00 EET 2019
+
+Современная работа с датой
+Введение в Date Time API
+Пакет java.time — базовый пакет для Java Date Time API: в нем содержатся такие классы как LocalDate, LocalTime, LocalDateTime, Instant, Period, Duration.
+Все объекты этих классов — immutable: их нельзя изменить после создания.
+Пакет java.time.format содержит в себе классы для форматирования времени: преобразования времени (и даты) в текстовую строку и обратно.
+Например, в нем содержится такой универсальный класс как DateTimeFormatter, который пришел на смену SimpleDateFormat.
+Пакет java.time.zone содержит классы для работы с часовыми поясами (time zones). Он содержит такие классы как TimeZone и ZonedDateTime.
+Если вы пишете код для сервера, клиенты которого находятся в разных частях света, эти классы вам очень понадобятся.
+LocalDate today = LocalDate.now(); Получение текущей даты
+ZoneId  timezone = ZoneId.of("Asia/Shanghai"); Получение даты в определенном часовом поясе
+LocalDate today = LocalDate.now(timezone);
+System.out.println("Сейчас в Шанхае = " + today);
+LocalDate date = LocalDate.of(2019, Month.FEBRUARY, 22); Получение конкретной даты
+LocalDate date = LocalDate.ofEpochDay(день); возвращает дату, отсчитанную от 1 января 1970 года.
+Код	                                    Вывод на экран
+LocalDate today = LocalDate.now();
+System.out.println(today.getYear());    2019
+System.out.println(today.getMonth());   FEBRUARY
+Изменение даты в объекте LocalDate
+Метод                                   	Описание
+plusDays(int days)                          Добавляет определенное количество дней к дате
+plusWeeks(int weeks)                        Добавляет недели к дате
+plusMonths(int months)                      Добавляет месяцы к дате
+plusYears(int years)                        Добавляет годы к дате
+minusDays(int days)                         Отнимает дни от даты
+minusWeeks(int weeks)                       Отнимает недели от даты
+minusMonths(int months)                     Отнимает месяцы от даты
+minusYears(int years)                       Отнимает годы от даты
+
+Современная работа со временем
+Класс LocalTime
+LocalTime time = LocalTime.now(); Получение текущего времени
+LocalTime time = LocalTime.of(часы, минуты, секунды, наносекунды); Получение заданного времени
+LocalTime time = LocalTime.of(часы, минуты, секунды);
+LocalTime time = LocalTime.of(часы, минуты);
+LocalTime time = LocalTime.ofSecondOfDay(секунды); Получение времени по номеру секунды, где секунды — это количество секунд, прошедшее с начала суток.
+Получение фрагментов времени
+Метод                                   	Описание
+int getHour()                               Возвращает часы
+int getMinute()                             Возвращает минуты
+int getSecond()                             Возвращает секунды
+int getNano()                               Возвращает наносекунды
+Изменение времени в объекте класса LocalTime
+Метод                                   	Описание
+plusHours(int hours)                        Добавляет часы
+plusMinutes(int minutes)                    Добавляет минуты
+plusSeconds(int seconds)                    Добавляет секунды
+plusNanos(int nanos)                        Добавляет наносекунды
+minusHours(int hours)                       Вычитает часы
+minusMinutes(int minutes)                   Вычитает минуты
+minusSeconds(int seconds)                   Вычитает секунды
+minusNanos(int nanos)                       Вычитает наносекунды
+
+Полезные нюансы при работе с DateTime API
+Класс LocalDateTime объединяет в себе возможности классов LocalDate и LocalTime: он хранит и дату, и время.
+Его объекты тоже неизменяемые, и его методы также аналогичны методам классов LocalDate и LocalTime
+LocalDateTime time = LocalDateTime.now();
+System.out.println("Сейчас = " + time); Сейчас = 2019-02-22T09:49:19.275039200
+Можно задать дату явно или через объекты LocalDate и LocalTime:
+LocalDate date = LocalDate.now();
+LocalTime time = LocalTime.now();
+LocalDateTime current = LocalDateTime.of(date, time);
+System.out.println("Сейчас = " + current); Сейчас = 2019-02-22T10:05:38.465675100
+LocalDateTime date = LocalDateTime.of(2019, Month.MAY, 15, 12, 15, 00);
+System.out.println("Сейчас = " + date); Сейчас = 2019-05-15T12:15
+
+Класс Instant
+В Date Time API добавили класс Instant для работы со временем, нацеленным на процессы внутри компьютеров.
+Вместо часов, минут и секунд, он оперирует секундами, миллисекундами и наносекундами.
+Этот класс хранит в себе два поля:
+количество секунд, прошедшее с 1 января 1970 года
+количество наносекунд
+Instant timestamp = Instant.now();
+Также можно создать новый объект с помощью разновидностей метода of(), если передать в него время, прошедшее с 1 января 1970 года:
+ofEpochMilli(long milliseconds)             Нужно передать количество миллисекунд
+ofEpochSecond(long seconds)                 Нужно передать количество секунд
+ofEpochSecond(long seconds, long nanos)     Нужно передать секунды и наносекунды
+Методы объектов Instant
+long getEpochSecond()                       Количество секунд, прошедшее с 1 января 1970 года
+int getNano()                               Наносекунды.
+long toEpochMilli()                         Количество миллисекунд, прошедшее с 1 января 1970 года
+Instant plusSeconds(long)                   Добавляет секунды к текущему моменту времени
+Instant plusMillis(long)                    Добавляет миллисекунды
+Instant plusNanos(long)                     Добавляет наносекунды
+Instant minusSeconds(long)                  Вычитает секунды
+Instant minusMillis(long)                   Вычитает миллисекунды
+Instant minusNanos(long)                    Вычитает наносекунды
+
+Часовые пояса
+Класс ZonedDateTime
+Есть еще один очень интересный класс в Date Time API — класс ZonedDateTime. Основное его назначение — удобно работать с датами в разных часовых поясах.
+Код	                                        Примечание
+ZoneId zone = ZoneId.of("Africa/Cairo");    Каир
+Код	                                        Вывод на экран
+ZoneId zone = ZoneId.of("Africa/Cairo");
+ZonedDateTime time = ZonedDateTime.now(zone);
+System.out.println(time);                   2019-02-22T11:37:58.074816+02:00[Africa/Cairo]
+Преобразование глобальной даты в локальную
+ZoneId zone = ZoneId.of("Africa/Cairo");
+ZonedDateTime cairoTime = ZonedDateTime.now(zone);
+LocalDate localDate = cairoTime.toLocalDate();
+LocalTime localTime = cairoTime.toLocalTime();
+LocalDateTime localDateTime = cairoTime.toLocalDateTime();
+Работа со временем
+int getYear()                               Возвращает год из конкретной даты
+Month getMonth()                            Возвращает месяц даты: одну из специальных констант JANUARY, FEBRUARY, ...;
+int getMonthValue()                         Возвращает номер месяца из даты. Январь == 1
+int getDayOfMonth()                         Возвращает номер дня в месяце
+DayOfWeek getDayOfWeek()                    Возвращает день недели: одну из специальных констант MONDAY, TUESDAY, ...;
+int getDayOfYear()                          Возвращает номер дня в году
+int getHour()                               Возвращает часы
+int getMinute()                             Возвращает минуты
+int getSecond()                             Возвращает секунды
+int getNano()                               Возвращает наносекунды
+Методы	                                    Описание
+plusYears(int)                              Добавляет годы к дате
+plusMonths(int)                             Добавляет месяцы к дате
+plusDays(int)                               Добавляет дни к дате
+plusHours(int)                              Добавляет часы
+plusMinutes(int)                            Добавляет минуты
+plusSeconds(int)                            Добавляет секунды
+plusNanos(int)                              Добавляет наносекунды
+minusYears(int)                             Отнимает годы от даты
+minusMonths(int)                            Отнимает месяцы от даты
+minusDays(int)                              Отнимает дни от даты
+minusHours(int)                             Вычитает часы
+minusMinutes(int)                           Вычитает минуты
+minusSeconds(int)                           Вычитает секунды
+minusNanos(int)                             Вычитает наносекунды
+
+Отображение времени - форматирование
+Класс DateTimeFormatter
+DateTimeFormatter dtf = DateTimeFormatter.ofPattern(шаблон);
+Код	                                        Вывод на экран
+DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yy");
+String text = dtf.format( LocalDateTime.now() );
+System.out.println(text);                   02-22-19
+Шаблон форматирования
+Буква	Обозначение
+y	    Год (Year)
+M	    Месяц (Month)
+d	    День (day)
+H	    Часы (Hours)
+m	    Минуты (Minutes)
+s	    Секунды (Seconds)
+S	    Тысячные доли секунды
+n	    Наносекунды
+Общая идея
+Количество букв влияет на длину текста. Чем большое букв, тем длиннее будет текст.
+Если буква H указывается один раз, то 9 часов будут отображаться как 9, а если буква H указывается два раза подряд, то 9 часов будут отображаться как 09.
+Если буква y указывается 2 раза подряд, то год пишется 2 цифрами, если 4 раза подряд — 4-мя цифрами.
+Если буква M указывается 2 раза подряд, то пишется номер месяца, если 3 раза подряд, то название месяца (3 первых буквы),
+если 4 раза подряд, то полное название месяца.
+Парсинг времени
+Код	                                        Вывод на экран
+DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMMM-dd-yyyy", Locale.ENGLISH);
+LocalDate date = LocalDate.parse("February-23-2019", dtf);
+System.out.println(date);                   February-23-2019
