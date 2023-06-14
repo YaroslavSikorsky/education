@@ -1,4 +1,4 @@
-package javarush.tasks.JavaCore.tasks01.task1220;
+package javarush.tasks.JavaCore.tasks02.task1220;
 
 /* 
 Класс Human и интерфейсы CanRun, CanSwim

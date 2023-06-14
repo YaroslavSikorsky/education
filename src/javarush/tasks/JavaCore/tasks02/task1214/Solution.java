@@ -1,4 +1,4 @@
-package javarush.tasks.JavaCore.tasks01.task1214;
+package javarush.tasks.JavaCore.tasks02.task1214;
 
 /* 
 Корова — тоже животное

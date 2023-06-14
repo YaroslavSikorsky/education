@@ -1,4 +1,4 @@
-package javarush.tasks.JavaCore.tasks01.task1207;
+package javarush.tasks.JavaCore.tasks02.task1207;
 
 /* 
 Int и Integer

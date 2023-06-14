@@ -1,4 +1,4 @@
-package javarush.tasks.JavaCore.tasks01.task1218;
+package javarush.tasks.JavaCore.tasks02.task1218;
 
 /* 
 Есть, летать и двигаться

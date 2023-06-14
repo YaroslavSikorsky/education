@@ -1,4 +1,4 @@
-package javarush.tasks.JavaCore.tasks01.task1211;
+package javarush.tasks.JavaCore.tasks02.task1211;
 
 /* 
 Абстрактный класс Pet

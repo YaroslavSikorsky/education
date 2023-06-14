@@ -1,4 +1,4 @@
-package javarush.tasks.JavaCore.tasks01.task1215;
+package javarush.tasks.JavaCore.tasks02.task1215;
 
 /* 
 Кошки не должны быть абстрактными!

@@ -1,4 +1,4 @@
-package javarush.tasks.JavaCore.tasks01.task1209;
+package javarush.tasks.JavaCore.tasks02.task1209;
 
 /* 
 Три метода и минимум

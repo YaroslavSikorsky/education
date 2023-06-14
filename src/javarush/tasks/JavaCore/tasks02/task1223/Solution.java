@@ -1,7 +1,7 @@
-package javarush.tasks.JavaCore.tasks01.task1222;
+package javarush.tasks.JavaCore.tasks02.task1223;
 
 /* 
-Больше не Пушистик
+И снова Пушистик…
 */
 
 public class Solution {
@@ -18,7 +18,7 @@ public class Solution {
         public Pet() {
         }
 
-        public String getName() {
+        public final String getName() {
             return name;
         }
 
@@ -31,11 +31,7 @@ public class Solution {
     public static class Cat extends Pet {
         @Override
         public void setName(String name){
-            this.name = "Я - кот";
-        }
-    @Override
-        public String getName(){
-            return name;
+            this.name = "";
         }
 
     }

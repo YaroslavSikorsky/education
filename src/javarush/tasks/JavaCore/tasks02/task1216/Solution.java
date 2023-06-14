@@ -1,4 +1,4 @@
-package javarush.tasks.JavaCore.tasks01.task1216;
+package javarush.tasks.JavaCore.tasks02.task1216;
 
 /* 
 Летать охота
