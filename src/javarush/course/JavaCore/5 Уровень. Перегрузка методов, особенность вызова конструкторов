@@ -4,6 +4,8 @@
 // Порядок загрузки классов, статические данные
 // Порядок инициализации переменных
 
+// Модификаторы доступа. Private, protected, default, public https://javarush.com/groups/posts/1988-modifikatorih-dostupa-private-protected-default-public
+// Порядок действий при создании объекта https://javarush.com/groups/posts/2137-porjadok-deystviy-pri-sozdanii-obhhekta
 
 
 
