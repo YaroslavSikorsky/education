@@ -2,8 +2,11 @@
 // Создание и запуск новых нитей (трэдов)
 // join — ожидание завершения нити
 // Здоровый sleep
+// Остановить бушующий поток: неофициальная версия
+// Остановить бушующий поток: официальная версия
 
-
+// Многопоточность в Java: суть, «плюсы» и частые ловушки https://javarush.com/groups/posts/1992-mnogopotochnostjh-v-java-sutjh-pljusih-i-chastihe-lovushki-
+// Многопоточность: что делают методы класса Thread https://javarush.com/groups/posts/1993-mnogopotochnostjh-chto-delajut-metodih-klassa-thread
 
 
 
@@ -18,18 +21,15 @@
 1 Создать объект класса Thread (нить)
 2 Передать в него объект, метод которого нужно выполнить
 3 Вызвать у созданного объекта Thread метод start.
-class Printer implements Runnable                                            Класс, который реализует интерфейс Runnable.
-{
-public void run()
-{
-System.out.println("I’m printer");
+class Printer implements Runnable  {                                          Класс, который реализует интерфейс Runnable.
+    public void run() {
+        System.out.println("I’m printer");
+    }
 }
-}
-public static void main(String[] args)
-{
-Printer printer = new Printer();
-Thread childThread = new Thread(printer);
-childThread.start();
+public static void main(String[] args) {
+    Printer printer = new Printer();
+    Thread childThread = new Thread(printer);
+    childThread.start();
 }
 1 Создали объект класса Printer, который содержит метод run.
 2 Создали новый объект класса Thread, передали ему в конструкторе объект printer, чей метод run()нужно будет исполнить.
@@ -46,21 +46,18 @@ childThread.start();
 class Printer extends Thread Унаследовались от класса Thread, который реализует интерфейс Runnable, и переопределили метод run.
 {
 private String name;
-public Printer(String name)
-{
-this.name = name;
+public Printer(String name) {
+    this.name = name;
 }
-public void run()
-{
-System.out.println("I’m " + this.name);
+    public void run() {
+        System.out.println("I’m " + this.name);
+    }
 }
-}
-public static void main(String[] args)
-{
-Printer printer = new Printer("Вася");  Создаем две нити, каждая на основе своего объекта типа Printer.
-printer.start();
-Printer printer2 = new Printer("Коля");
-printer2.start();
+public static void main(String[] args) {
+    Printer printer = new Printer("Вася");  Создаем две нити, каждая на основе своего объекта типа Printer.
+    printer.start();
+    Printer printer2 = new Printer("Коля");
+    printer2.start();
 }
 но у него есть минусы:
 1 Вам может понадобиться запустить несколько нитей на основе одного единственного объекта, как это сделано в «примере с Наташей».
@@ -69,24 +66,20 @@ printer2.start();
 
 join — ожидание завершения нити
 Смысл его в следующем. Одна нить ждет, пока полностью завершится работа второй нити
-class Printer implements Runnable                                           Класс, который реализует интерфейс Runnable.
-{
-private String name;
-public Printer(String name)
-{
-this.name = name;
+class Printer implements Runnable {                                           Класс, который реализует интерфейс Runnable.
+    private String name;
+    public Printer(String name) {
+        this.name = name;
+    }
+    public void run() {
+        System.out.println("I’m " + this.name);
+    }
 }
-public void run()
-{
-System.out.println("I’m " + this.name);
-}
-}
-public static void main(String[] args)
-{
-Printer printer1 = new Printer("Коля");
-Thread thread1 = new Thread(printer1);
-thread1.start();
-thread1.join();
+public static void main(String[] args) {
+    Printer printer1 = new Printer("Коля");
+    Thread thread1 = new Thread(printer1);
+    thread1.start();
+    thread1.join();
 }
 Главная нить создает дочернюю нить – объект thread1.
 Затем запускает ее – вызов thread1.start();
@@ -101,9 +94,8 @@ thread1.join();
 Здоровый sleep
 Метод sleep объявлен как статический метод класса Thread, т.е. он не привязан ни к какому объекту. Цель этого метода, чтобы программа «заснула» на некоторое время.
 Код
-public static void main(String[] args)
-{
-Thread.sleep(2000);
+public static void main(String[] args) {
+    Thread.sleep(2000);
 }
 Описание
 Программа запустится.
@@ -112,3 +104,85 @@ Thread.sleep(2000);
 Единственный параметр метода sleep – это время. Время задается в тысячных долях секунды (миллисекундах).
 Как только нить вызывает этот метод, она засыпает на указанное количество миллисекунд.
 Этот метод часто используется в дочерних нитях, когда нужно делать какое-то действие постоянно, но не слишком часто.
+
+Остановить бушующий поток: неофициальная версия
+Нить остановить нельзя, она может остановиться только сама.
+Но можно дать нити сигнал, сообщить ей каким-нибудь образом, что работу больше выполнять не нужно, и ей нужно завершиться.
+Так же, как главная нить завершается вместе с выходом из метода main, чтобы завершить дочернюю нить, она должна закончить выполнение метода run.
+лучше завести такую переменную для каждой нити. Удобнее всего будет добавить ее прямо в класс.
+Можно добавить туда переменную boolean isRun. Хотя лучше добавить переменную boolean isCancel, которая будет принимать значение true, если задание отменено.
+class Clock implements Runnable {
+    private boolean isCancel = false;
+    public void cancel() {
+        this.isCancel = true;}
+    public void run() {
+        while (!isCancel) {
+            Thread.sleep(1000);
+            System.out.println("Tik");
+        }
+    }
+}
+Описание
+Класс Clock (часы) будет писать в консоль раз в секунду слово «Тик», пока переменная isCancel равна false.
+Когда переменная isCancel станет равной true, метод run завершится.
+Код
+public static void main(String[] args) {
+    Clock clock = new Clock();
+    Thread clockThread = new Thread(clock);
+    clockThread.start();
+    Thread.sleep(10000);
+    clock.cancel();
+}
+Описание
+Главная нить, запускает дочернюю нить – часы, которая должна работать вечно.
+Ждет 10 секунд и отменяет задание, вызовом метода cancel.
+Главная нить завершает свою работу.
+Нить часов завершает свою работу.
+
+Остановить бушующий поток: официальная версия
+На самом деле нечто подобное существует в классе Thread. Только переменная называется не isCancel, а isInterrupted,
+и метод остановки, соответственно, не cancel(), а interrupt().
+class Clock implements Runnable {
+        public void run() {
+            Thread current = Thread.currentThread();
+            while (!current.isInterrupted()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    current.interrupt();
+                }
+            System.out.println("Tik");
+            }
+        }
+}
+Т.к. много нитей могут вызвать метод run одного объекта, то объект Clock в своем методе run получает объект вызвавшей его нити («текущей нити»).
+Класс Clock (часы) будет писать в консоль раз в секунду слово «Tik», пока переменная isInterrupted текущей нити равна false.
+Когда переменная isInterrupted станет равной true, метод run завершится.
+public static void main(String[] args) throws Exception {
+    Clock clock = new Clock();
+    Thread clockThread = new Thread(clock);
+    clockThread.start();
+    Thread.sleep(10000);
+    clockThread.interrupt();
+}
+Главная нить, запускает дочернюю нить – часы, которая должна работать вечно.
+Ждет 10 секунд и отменяет задание, вызовом метода interrupt.
+Главная нить завершает свою работу.
+Нить часов завершает свою работу.
+Более того, в методе sleep, который так любят использовать для организации вечного цикла в методе run, есть автоматическая проверка переменной isInterrupted.
+Если нить вызовет метод sleep, то этот метод сначала проверит, а не установлена ли для текущей (вызвавшей его нити) переменная isInterrupted в true.
+И если установлена, то метод не будет спать, а выкинет исключение InterruptedException.
+А зачем выкидывать исключение? Не лучше ли тоже просто в цикле вместо isCancel подставить isInterrupted()?
+— Во-первых, не всегда в методе run есть цикл. Метод может состоять просто из двух десятков вызовов других методов.
+Тогда перед вызовом каждого придется добавлять проверку isInterrupted.
+Во-вторых, вдруг какой-то метод очень долго исполняется, т.к. делает много разных действий.
+В-третьих, выкидывание исключения – это не замена проверке isInterrupted, а скорее удобное дополнение.
+Выкинутое исключение позволяет быстро раскрутить стек вызовов до самого run.
+В-четвертых, метод sleep часто используют, и, получается, к такому полезному методу неявно добавили не менее полезную проверку.
+Вроде бы никто специально проверку не добавлял, а она есть. Это очень ценно, когда ты используешь много чужого кода и не можешь сам добавить в него проверку.
+В-пятых, дополнительная проверка не приводит к снижению производительности. Вызов метода sleep значит, что нить должна ничего не делать (спать),
+поэтому дополнительная работа никому не мешает.
+Последнее: ты можешь в своем методе run вызывать чужой код, к которому у тебя нет доступа (исходников и/или прав их менять).
+Он может не иметь проверок на isInterrupted, а также перехватывать с помощью try…catch(Exception e) все возникшие исключения.
+Никто не гарантирует, что нить можно остановить. Она может остановиться только сама.
