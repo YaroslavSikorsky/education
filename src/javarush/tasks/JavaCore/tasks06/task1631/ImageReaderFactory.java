@@ -1,6 +1,7 @@
 package javarush.tasks.JavaCore.tasks06.task1631;
 
-import com.javarush.task.task16.task1631.common.*;
+import javarush.tasks.JavaCore.tasks06.task1631.common.*;
+
 
 public class ImageReaderFactory {
     public static ImageReader getImageReader(ImageTypes imageTypes){

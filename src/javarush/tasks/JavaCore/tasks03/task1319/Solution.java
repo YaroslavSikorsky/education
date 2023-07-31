@@ -1,7 +1,11 @@
 package javarush.tasks.JavaCore.tasks03.task1319;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+
 
 /* 
 Писатель в файл с консоли

@@ -1,8 +1,7 @@
 package javarush.tasks.JavaCore.tasks06.task1631;
 
-import com.javarush.task.task16.task1631.common.ImageReader;
-import com.javarush.task.task16.task1631.common.ImageTypes;
 
+import javarush.tasks.JavaCore.tasks06.task1631.common.*;
 /* 
 Factory method pattern
 */

@@ -14,7 +14,7 @@ public class Solution {
     }
 
     interface DBObject {
-        String initializeIdAndName(long id, String name);
+        User initializeIdAndName(long id, String name);
     }
 
     static class User implements DBObject {
